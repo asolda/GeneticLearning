@@ -1,3 +1,4 @@
-data/*
+data/
+models/
 *.csv
 *summary_logs/
