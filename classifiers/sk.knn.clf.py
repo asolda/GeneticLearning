@@ -32,7 +32,7 @@ x_train = np.array(x_train).reshape(len(x_train), -1)
 x_test = np.array(x_test).reshape(len(x_test), -1)
 
 #creating new classifier
-clf = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(200, 400, 100), random_state=1)
+clf = KNeighborsClassifier(n_neighbors=3)
 
 #fitting classifier
 clf.fit(x_train, y_train)
@@ -62,6 +62,6 @@ print("Accuracy on 0:", "{0:.10f}".format(correctZeros/expZeros))
 print("Accuracy on 1:", "{0:.10f}".format(correctOnes/expOnes))
 
 # Saving on disk
-modelfile = TRAINING + ".sk.bmlp.pkl"
+modelfile = TRAINING + ".sk.knn.pkl"
 print("Saving model to", modelfile)
 joblib.dump(clf, modelfile) 
