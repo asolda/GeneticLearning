@@ -5,12 +5,12 @@ import numpy as np
 
 #problem parameters
 membersize = 100 #length for each indivudual
-poplen = 5000 #population dimension
+poplen = 1000 #population dimension
 min_val = 0 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
-NRUN = 30 #number of parallel indipendent runs
-NGEN = 30 #number of generations for each separate run
+NRUN = 10 #number of parallel indipendent runs
+NGEN = 20 #number of generations for each separate run
 
 verbose = True #debug messages
 
