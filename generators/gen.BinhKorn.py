@@ -4,12 +4,12 @@ from deap import creator, base, tools, algorithms
 import numpy as np
 
 #problem parameters
-membersize = 50 #length for each indivudual
+membersize = 100 #length for each indivudual
 poplen = 1000 #population dimension
 min_val = 0 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
-NRUN = 50 #number of parallel indipendent runs
+NRUN = 5 #number of parallel indipendent runs
 NGEN = 10 #number of generations for each separate run
 
 verbose = True #debug messages
@@ -62,7 +62,7 @@ for n in range(NRUN):
 
 #building training dataset
 if(verbose):
-    print("Building training dataset...")
+    print("Building first part of training dataset...")
 clfin = []
 tops = []
 for population in training:
@@ -79,6 +79,87 @@ for population in training:
         if member not in clfin:
             clfin.append(member)
         
+##############
+# running nsga
+
+if(verbose):
+    print("Starting nsga runs")
+
+def uniform(low, up, size=None):
+    try:
+        return [random.uniform(a, b) for a, b in zip(low, up)]
+    except TypeError:
+        return [random.uniform(a, b) for a, b in zip([low] * size, [up] * size)]
+
+toolbox.register("attr_float", uniform, min_val, max_val, membersize)
+toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.attr_float)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+toolbox.register("evaluate", evaluate)
+toolbox.register("mate", tools.cxSimulatedBinaryBounded, low=min_val, up=max_val, eta=20.0)
+toolbox.register("mutate", tools.mutPolynomialBounded, low=min_val, up=max_val, eta=20.0, indpb=1.0/membersize)
+toolbox.register("select", tools.selNSGA2)
+
+pop = toolbox.population(n=poplen)
+
+pop = toolbox.select(pop, len(pop))
+
+CXPB = 0.9
+
+training = []
+for n in range(NRUN):
+    if(verbose):
+        print("NSGA run", n, "out of", NRUN)
+    # Begin the generational process
+    for gen in range(1, NGEN):
+        # Vary the population
+        offspring = tools.selTournamentDCD(pop, len(pop))
+        offspring = [toolbox.clone(ind) for ind in offspring]
+
+        # Evaluate the individuals with an invalid fitness
+        invalid_ind = [ind for ind in pop if not ind.fitness.valid]
+        fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+        for ind, fit in zip(invalid_ind, fitnesses):
+            ind.fitness.values = fit
+
+        # This is just to assign the crowding distance to the individuals
+        # no actual selection is done
+        pop = toolbox.select(pop, len(pop))
+
+        for ind1, ind2 in zip(offspring[::2], offspring[1::2]):
+            if random.random() <= CXPB:
+                toolbox.mate(ind1, ind2)
+            toolbox.mutate(ind1)
+            toolbox.mutate(ind2)
+            del ind1.fitness.values, ind2.fitness.values
+
+        # Evaluate the individuals with an invalid fitness
+        invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+        fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+        for ind, fit in zip(invalid_ind, fitnesses):
+            ind.fitness.values = fit
+
+        # Select the next generation population
+        pop = toolbox.select(pop + offspring, poplen)
+    training.append(pop)
+
+#building training dataset
+if(verbose):
+    print("Building second part of training dataset...")
+for population in training:
+    pareto = tools.sortNondominated(population, len(population))
+    top = pareto[0] #the actual pareto front
+    #using best and worst elements to build training data
+    for member in top:
+        #careful avoiding duplicates
+        if member not in tops:
+            tops.append(member)
+        if member not in clfin:
+            clfin.append(member)
+    for member in tools.selBest(population, k=len(population))[:-len(top)]:
+        if member not in clfin:
+            clfin.append(member)
+
 labels = []
 ones = 0
 zeros = 0
