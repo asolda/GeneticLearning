@@ -81,3 +81,4 @@ model_file_name = MODEL + TRAINING.rsplit('/', 1)[-1] + '.h5'
 print("Saving model to", model_file_name)
 
 model.save(model_file_name)
+del model
