@@ -1,5 +1,6 @@
 data/
 models/
+populations/
 *.csv
 *summary_logs/
 .DS_Store
