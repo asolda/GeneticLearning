@@ -10,3 +10,5 @@ sk. classifiers are based on machine learning, while tf. classifiers are based o
 - bmlp is a Binary Multi Layer Perceptron classifier
 - knn is the K Nearest Neighbor classifier
 - ensemble is an ensemble classifier
+
+Same applies for DL based classifiers
