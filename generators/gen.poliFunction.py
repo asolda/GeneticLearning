@@ -4,14 +4,15 @@ from deap import creator, base, tools, algorithms
 import numpy as np
 
 #problem parameters
-membersize = 100 #length for each indivudual
-poplen = 1000 #population dimension
+membersize = 50 #length for each indivudual
+poplen = 500 #population dimension
 min_val = 0 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
 NRUN = 5 #number of parallel indipendent runs
-NGEN = 10 #number of generations for each separate run
-
+#number of generations for each separate run
+NGEN_1 = 5
+NGEN_2 = 5
 verbose = True #debug messages
 
 filename = "poliFunction.dataset"
@@ -57,7 +58,7 @@ training = []
 for n in range(NRUN):
     if(verbose):
         print("Run", n, "out of", NRUN)
-    for gen in range(NGEN):
+    for gen in range(NGEN_1):
         offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
         fits = toolbox.map(toolbox.evaluate, offspring)
         for fit, ind in zip(fits, offspring):
@@ -80,7 +81,8 @@ for population in training:
             tops.append(member)
         if member not in clfin:
             clfin.append(member)
-    for member in tools.selBest(population, k=len(population))[:-len(top)]:
+    elems = len(clfin)
+    for member in tools.selBest(population, k=len(population))[:-elems]:
         if member not in clfin:
             clfin.append(member)
         
@@ -116,7 +118,7 @@ for n in range(NRUN):
     if(verbose):
         print("GNSA run", n, "out of", NRUN)
     # Begin the generational process
-    for gen in range(1, NGEN):
+    for gen in range(1, NGEN_2):
         # Vary the population
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [toolbox.clone(ind) for ind in offspring]
@@ -161,7 +163,8 @@ for population in training:
             tops.append(member)
         if member not in clfin:
             clfin.append(member)
-    for member in tools.selBest(population, k=len(population))[:-len(top)]:
+    elems = len(clfin)
+    for member in tools.selBest(population, k=len(population))[:-elems]:
         if member not in clfin:
             clfin.append(member)
 

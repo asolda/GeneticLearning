@@ -11,7 +11,7 @@ poplen = 1000 #population dimension
 min_val = 0 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
-NGEN = 20 #number of generations for each run
+NGEN = 100 #number of generations for each run
 
 verbose = True
 
