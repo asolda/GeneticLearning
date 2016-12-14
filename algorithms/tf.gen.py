@@ -71,6 +71,6 @@ if(verbose):
 
 with open(outfile, 'w') as f:
     for elem in population:
-        for value in elem[:len(sample) - 2]:
+        for value in elem[:len(elem) - 2]:
             f.write(str(value) + ', ')
-        f.write(str(elem[len(sample) - 1]) + "\n")
+        f.write(str(elem[len(elem) - 1]) + "\n")
