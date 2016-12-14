@@ -75,7 +75,8 @@ for population in training:
             tops.append(member)
         if member not in clfin:
             clfin.append(member)
-    for member in tools.selBest(population, k=len(population))[:-len(top)]:
+    elems = len(clfin)
+    for member in tools.selBest(population, k=len(population))[:-elems]:
         if member not in clfin:
             clfin.append(member)
         
@@ -156,7 +157,8 @@ for population in training:
             tops.append(member)
         if member not in clfin:
             clfin.append(member)
-    for member in tools.selBest(population, k=len(population))[:-len(top)]:
+    elems = len(clfin)
+    for member in tools.selBest(population, k=len(population))[:-elems]:
         if member not in clfin:
             clfin.append(member)
 
