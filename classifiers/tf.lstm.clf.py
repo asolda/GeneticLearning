@@ -4,6 +4,7 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Reshape
 from keras.layers.recurrent import LSTM
 from keras.optimizers import RMSprop
+from keras.callbacks import ReduceLROnPlateau
 import numpy as np
 import time
 import pandas as pd
@@ -70,19 +71,23 @@ model.add(Activation('softmax'))
 
 model.summary()
 
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                  patience=3, min_lr=0.0001)
+
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(lr=0.001),
               metrics=['accuracy'])
 
 history = model.fit(x_train, y_train,
                     batch_size=batch_size, nb_epoch=nb_epoch,
-                    verbose=1, validation_data=(x_test, y_test))
+                    verbose=1, validation_data=(x_test, y_test),
+                    callbacks=[reduce_lr])
 
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-model_file_name = MODEL + TRAINING.rsplit('/', 1)[-1] + '.h5'
+model_file_name = MODEL + TRAINING.rsplit('/', 1)[-1] + '.lstm.h5'
 
 print("Saving model to", model_file_name)
 
