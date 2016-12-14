@@ -13,8 +13,8 @@ TRAINING = str(sys.argv[1])
 TEST = str(sys.argv[2])
 
 # Load datasets
-training_set = pd.read_csv(TRAINING, dtype=np.int, header = 0)
-test_set = pd.read_csv(TEST, dtype=np.int, header = 0)
+training_set = pd.read_csv(TRAINING, dtype=np.float, header = 0)
+test_set = pd.read_csv(TEST, dtype=np.float, header = 0)
 
 num_features = training_set.shape[1] - 1
 num_labels = 2 #0 or 1

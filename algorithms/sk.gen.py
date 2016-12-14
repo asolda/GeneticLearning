@@ -13,12 +13,12 @@ if len(sys.argv) != 2:
 modelfile = str(sys.argv[1])
 
 #problem parameters
-membersize = 50 #length for each indivudual
+membersize = 100 #length for each indivudual
 poplen = 1000 #population dimension
 min_val = 0 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
-NGEN = 100 #number of generations for each separate run
+NGEN = 100 #number of generations for each run
 
 verbose = True
 
