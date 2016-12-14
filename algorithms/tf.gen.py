@@ -64,7 +64,7 @@ for gen in range(NGEN):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
 
-outfile = "ft.population." + str(NGEN) + ".csv"
+outfile = "tf.population." + str(NGEN) + ".csv"
 
 if(verbose):
     print("Saving population to", outfile)
