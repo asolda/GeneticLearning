@@ -69,10 +69,7 @@ if(verbose):
     print("Saving population to", outfile)
 
 with open(outfile, 'w') as f:
-    for param in population[0]:
-        f.write(", ")
-    f.write("Fitness value\n")
-    for member in population:
-        for value in member:
-            f.write(str(value) + ", ")
-        f.write(str(nneval(member)) + "\n")
+    for elem in population:
+        for value in elem[:len(elem) - 2]:
+            f.write(str(value) + ', ')
+        f.write(str(elem[len(elem) - 1]) + "\n")
