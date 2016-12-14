@@ -4,8 +4,9 @@ import pandas as pd
 import numpy as np
 from deap import creator, base, tools, algorithms
 
-if(len(sys.argv) != 2):
-    print('Usage:', str(sys.argv[0]), 'population.csv')
+if(len(sys.argv) < 2 or len(sys.argv) > 3):
+    print('Usage:', str(sys.argv[0]), 'population.csv (optional) skip (to skip nsga)')
+    sys.exit()
 
 #problem parameters
 membersize = 100 #length for each indivudual
@@ -41,6 +42,10 @@ for member in population:
 
 mean1 = term1/len(population)
 mean2 = term2/len(population)
+
+if(len(sys.argv) == 3):
+    print("Classifier:", mean1, mean2)
+    sys.exit()
 
 if(verbose):
     print("Starting nsga runs")
