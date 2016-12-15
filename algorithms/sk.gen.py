@@ -15,10 +15,10 @@ modelfile = str(sys.argv[1])
 #problem parameters
 membersize = 100 #length for each indivudual
 poplen = 1000 #population dimension
-min_val = 0 #minimum value used when generating random individuals
+min_val = -5 #minimum value used when generating random individuals
 max_val = 5 #maximum value used when generating random individuals
 
-NGEN = 100 #number of generations for each run
+NGEN = 20 #number of generations for each run
 
 verbose = True
 
@@ -40,11 +40,11 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 #fitness function based on classifier
 def nneval(individual):
     y = np.array(individual).reshape(1, -1)
-    cl = clf.predict(y)
-    if cl[0] == 0:
-        return 1 - clf.predict_proba(y)[0][0],
+    probs = clf.predict_proba(y)
+    if probs[0][1] > .5:
+        return probs[0][1],
     else:
-        return clf.predict_proba(y)[0][1],
+        return 1 - probs[0][0],
 
 toolbox.register("evaluate", nneval)
 toolbox.register("mate", tools.cxTwoPoint)
