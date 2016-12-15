@@ -33,4 +33,122 @@ First step is to generate a training set for the classifiers. You can do so usin
 
 Then you have to train a classifier. Different classifiers are provided in the "classifiers" folder. Eash classifier produces a model that will be used as a fitness function in a GA.
 
-Pre-implemented genetic algorithms using the trained classifiers are available in the "algorithms" folder.  
+Pre-implemented genetic algorithms using the trained classifiers are available in the "algorithms" folder.
+
+You can then evaluate the quality of the solution using the script inside the "evaluators" folder.
+
+### Complete example
+
+Let's say you want to use a DL classifier as a fitness function for the "single" objective function.
+
+**Step 1**: Generate dataset
+```
+cd generators
+python gen.single.py
+```
+
+You will read something like:
+```
+Starting algorithm runs
+Run 0 out of 5
+Run 1 out of 5
+Run 2 out of 5
+Run 3 out of 5
+Run 4 out of 5
+Building first part of training dataset...
+Starting nsga runs
+NSGA run 0 out of 5
+NSGA run 1 out of 5
+NSGA run 2 out of 5
+NSGA run 3 out of 5
+NSGA run 4 out of 5
+Building second part of training dataset...
+Shuffling dataset and setting labels
+0: 992 1: 10
+Writing dataset to single.dataset.1002.992.10.csv
+Writing test dataset to single.testset.1002.992.10.csv
+```
+
+**Step 2**: Train the model. For the sake of order, create a new folder in the root of the project named `data` and move the datasets there:
+
+From the root folder:
+```
+mkdir data
+mv generators/single.dataset.1002.992.10.csv /data/
+mv generators/single.testset.1002.992.10.csv /data/
+mkdir models
+```
+
+Actual training:
+```
+cd classifiers
+python3 tf.bmlp.clf.py ../data/single.dataset.1002.992.10.csv ../data/single.testset.1002.992.10.csv ../models
+```
+
+Output (truncated):
+```
+...
+
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to
+====================================================================================================
+dense_1 (Dense)                  (None, 512)           51712       dense_input_1[0][0]
+____________________________________________________________________________________________________
+activation_1 (Activation)        (None, 512)           0           dense_1[0][0]
+____________________________________________________________________________________________________
+dropout_1 (Dropout)              (None, 512)           0           activation_1[0][0]
+____________________________________________________________________________________________________
+dense_2 (Dense)                  (None, 512)           262656      dropout_1[0][0]
+____________________________________________________________________________________________________
+activation_2 (Activation)        (None, 512)           0           dense_2[0][0]
+____________________________________________________________________________________________________
+dropout_2 (Dropout)              (None, 512)           0           activation_2[0][0]
+____________________________________________________________________________________________________
+dense_3 (Dense)                  (None, 2)             1026        dropout_2[0][0]
+____________________________________________________________________________________________________
+activation_3 (Activation)        (None, 2)             0           dense_3[0][0]
+====================================================================================================
+Total params: 315394
+____________________________________________________________________________________________________
+Train on 1000 samples, validate on 499 samples
+
+...
+
+Test accuracy: 1.0
+Saving model to ../models/single.dataset.1002.992.10.csv.bmlp.h5
+```
+
+**Step 3**: Run GA.
+
+From the root of your project:
+```
+cd algorithms
+python tf.gen.py ../models/single.dataset.1002.992.10.csv.bmlp.h5
+```
+
+```
+Classifier loaded
+Gen: 0 out of 20
+Gen: 1 out of 20
+...
+Gen: 19 out of 20
+Saving population to tf.population.20.csv
+```
+
+**Step 4**: Evaluate population. Like we did in step 2, we create a new folder for the population.
+
+From the root:
+```
+mkdir populations
+mv algorithms/tf.population.20.csv populations/
+```
+
+We can now evaluate it:
+```
+cd evaluators
+python single.eval.py ../populations/tf.population.20.csv skip
+```
+
+```
+Classifier: -108.119238477
+```
