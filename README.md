@@ -69,6 +69,8 @@ Writing dataset to single.dataset.1002.992.10.csv
 Writing test dataset to single.testset.1002.992.10.csv
 ```
 
+This is clearly not a good dataset, but we will stick with it for this example. Tweak the parameters to create better datasets.
+
 **Step 2**: Train the model. For the sake of order, create a new folder in the root of the project named `data` and move the datasets there:
 
 From the root folder:
