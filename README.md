@@ -2,6 +2,7 @@
 
 ## Informations
 Author: Andrea Soldà, a.solda92@gmail.com
+
 Please note that this is an older project and will not receive further updates.
 
 ## What is this?
