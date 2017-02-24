@@ -2,6 +2,7 @@
 
 ## Informations
 Author: Andrea Soldà, a.solda92@gmail.com
+Please note that this is an older project and will not receive further updates.
 
 ## What is this?
 The purpose of this project is to show that a certain number of objective functions can be reduced to one neural network (NN) and that a properly trained NN can provide benefits when used to evaluate the fitness of individuals during the evolution process of a Genetic Algorithm (GA).
@@ -105,7 +106,7 @@ ________________________________________________________________________________
 activation_2 (Activation)        (None, 512)           0           dense_2[0][0]
 ____________________________________________________________________________________________________
 dropout_2 (Dropout)              (None, 512)           0           activation_2[0][0]
-____________________________________________________________________________________________________
+___________________________________________________________________________________________________
 dense_3 (Dense)                  (None, 2)             1026        dropout_2[0][0]
 ____________________________________________________________________________________________________
 activation_3 (Activation)        (None, 2)             0           dense_3[0][0]
