@@ -1,4 +1,4 @@
-# Super potato
+# Genetic Learning
 
 ## Informations
 Author: Andrea Soldà, a.solda92@gmail.com
